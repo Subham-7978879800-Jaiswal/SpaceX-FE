@@ -38,7 +38,7 @@ const History = (props) => {
       if (node) observer.observe(node); // start observing the last element
       observerRef.current = observer;
     },
-    [hasMoreLaunches, setPage, options, isPendingLaunch]
+    [hasMoreLaunches, setPage, isPendingLaunch]
   );
 
   const tableBody = useMemo(() => {
