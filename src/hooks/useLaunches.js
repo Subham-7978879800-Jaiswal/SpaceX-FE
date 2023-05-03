@@ -7,15 +7,24 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
   const [launches, saveLaunches] = useState([]);
   const [isPendingLaunch, setPendingLaunch] = useState(false);
   const { updateErrorMessage } = useErrorContext();
+  const [page, setPage] = useState(1);
+  const [hasMoreLaunches, setHasMoreLaunches] = useState(true);
 
   const getLaunches = useCallback(async () => {
-    const fetchedLaunches = await httpGetLaunches();
-    saveLaunches(fetchedLaunches);
-  }, []);
+    setPendingLaunch(true);
+    const fetchedLaunches = await httpGetLaunches(20, page);
+    setPendingLaunch(false);
+    if (!fetchedLaunches.ErrorMessage) {
+      setHasMoreLaunches(fetchedLaunches.length > 0);
+      saveLaunches((prev) => {
+        return [...prev, ...fetchedLaunches];
+      });
+    }
+  }, [page]);
 
   useEffect(() => {
     getLaunches();
-  }, [getLaunches]);
+  }, [getLaunches, page]);
 
   const submitLaunch = useCallback(
     async (e) => {
@@ -81,6 +90,8 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
     isPendingLaunch,
     submitLaunch,
     abortLaunch,
+    setPage,
+    hasMoreLaunches,
   };
 }
 
