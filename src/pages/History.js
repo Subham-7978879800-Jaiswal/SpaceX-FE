@@ -4,6 +4,10 @@ import { Loading } from "arwes";
 
 import useLaunches from "../hooks/useLaunches";
 
+  const options = {
+    root: null,
+  };
+  
 const History = (props) => {
   const onSuccessSound = () =>
     props.sounds.success && props.sounds.success.play();
@@ -19,9 +23,7 @@ const History = (props) => {
 
   const observerRef = useRef();
 
-  const options = {
-    root: null,
-  };
+
 
   const lastElementRef = useCallback(
     (node) => {
