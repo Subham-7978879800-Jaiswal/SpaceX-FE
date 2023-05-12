@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,20 +15,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Nodejs
+      - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16
-      
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Build
         run: npm run build
+
   docker-image:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
@@ -46,8 +47,9 @@ jobs:
 
       - name: Push Docker image
         run: docker push subhamjaiswal79788/nasa-fe:${{ github.sha }}
+
   ssh-to-ec2-and-deploy:
-    needs: docker-image  
+    needs: docker-image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -56,17 +58,15 @@ jobs:
       - name: Set up SSH key
         uses: LuisEnMarroquin/setup-ssh-action@v2.0.0
         with:
-        ORIGIN: ${{ secrets.HOST }}
-        SSHKEY: ${{ secrets.TEST }}
-        NAME: production
-        PORT:  ${{ secrets.PORT }}
-        USER: ubuntu
+          ORIGIN: ${{ secrets.HOST }}
+          SSHKEY: ${{ secrets.TEST }}
+          NAME: production
+          PORT: ${{ secrets.PORT }}
+          USER: ubuntu
         script: |
           docker stop nasa-fe || true
           docker rm nasa-fe || true
 
           docker pull subhamjaiswal79788/nasa-fe:${{ github.sha }}
 
-          docker run -d --name nasa-fe -p  ${{ secrets.PORT }}: ${{ secrets.PORT }} subhamjaiswal79788/nasa-fe:${{ github.sha }}
-
-      
+          docker run -d --name nasa-fe -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-fe:${{ github.sha }}
