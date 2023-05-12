@@ -1,15 +1,8 @@
 FROM node:lts-alpine
-
 COPY . .
-
-RUN npm install serve
-
+USER node
 RUN npm install --only=production
-
 RUN npm run build
 
-USER node
-
 EXPOSE 3000
-
-CMD ["npx", "run", "eject"]
+CMD ["serve","-p","3000","build/"]
