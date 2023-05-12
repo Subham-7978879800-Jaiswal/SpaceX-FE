@@ -12,4 +12,4 @@ USER node
 
 EXPOSE 3000
 
-CMD ["npx", "serve", "-s", "build"]
+CMD ["npx", "run", "eject"]
