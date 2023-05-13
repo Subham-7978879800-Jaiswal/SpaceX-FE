@@ -1,5 +1,5 @@
 const API_URL = "http://3.110.86.75:4000";
-
+console.log(API_URL);
 // Load planets and return as JSON.
 async function httpGetPlanets() {
   try {
