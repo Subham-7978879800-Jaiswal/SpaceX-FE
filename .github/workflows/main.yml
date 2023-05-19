@@ -76,7 +76,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.TEST}}
           script: |
-            docker stop nasa-be || true
-            docker rm nasa-be || true
-            docker pull subhamjaiswal79788/nasa-be:${{ github.sha }}
-            docker run --restart=always -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-be:${{ github.sha }}
+            docker stop nasa-fe || true
+            docker rm nasa-fe || true
+            docker pull subhamjaiswal79788/nasa-fe:${{ github.sha }}
+            docker run --restart=always -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-fe:${{ github.sha }}
