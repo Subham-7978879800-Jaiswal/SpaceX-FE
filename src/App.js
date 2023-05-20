@@ -12,6 +12,8 @@ import AppLayout from "./pages/AppLayout";
 import { theme, resources, sounds } from "./settings";
 
 import { ErrorProvider } from "./hooks/errorContext";
+import { StoreProvider } from "./hooks/store";
+
 import ErrorSnackBar from "./components/errorSnackBar";
 
 const App = () => {
@@ -24,12 +26,14 @@ const App = () => {
           pattern={resources.pattern}
         >
           {(anim) => (
-            <ErrorProvider>
-              <Router>
-                <ErrorSnackBar></ErrorSnackBar>
-                <AppLayout show={anim.entered} />
-              </Router>
-            </ErrorProvider>
+              <ErrorProvider>
+            <StoreProvider>
+                <Router>
+                  <ErrorSnackBar></ErrorSnackBar>
+                  <AppLayout show={anim.entered} />
+                </Router>
+            </StoreProvider>
+              </ErrorProvider>
           )}
         </Arwes>
       </SoundsProvider>

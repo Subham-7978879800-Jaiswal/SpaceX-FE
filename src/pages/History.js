@@ -2,28 +2,24 @@ import { useCallback, useMemo, useRef } from "react";
 import { Appear, Table, Paragraph } from "arwes";
 import { Loading } from "arwes";
 
-import useLaunches from "../hooks/useLaunches";
+const options = {
+  root: null,
+};
 
-  const options = {
-    root: null,
-  };
-  
-const History = (props) => {
-  const onSuccessSound = () =>
-    props.sounds.success && props.sounds.success.play();
-  const onAbortSound = () => props.sounds.abort && props.sounds.abort.play();
-  const onFailureSound = () =>
-    props.sounds.warning && props.sounds.warning.play();
-
-  const { isPendingLaunch, setPage, launches, hasMoreLaunches } = useLaunches(
-    onSuccessSound,
-    onAbortSound,
-    onFailureSound
-  );
+const History = ({
+  onSuccessSound,
+  onAbortSound,
+  onFailureSound,
+  sounds,
+  entered,
+  launches,
+  isPendingLaunch,
+  hasMoreLaunches,
+  setPage
+}) => {
+  console.log("Direct History");
 
   const observerRef = useRef();
-
-
 
   const lastElementRef = useCallback(
     (node) => {
@@ -48,7 +44,7 @@ const History = (props) => {
         return (
           <tr
             ref={launches.length - 1 === index ? lastElementRef : null}
-            key={String(launch.flightNumber)}
+            key={index}
           >
             <td>
               <span style={{ color: launch.success ? "greenyellow" : "red" }}>
@@ -67,7 +63,7 @@ const History = (props) => {
 
   return (
     <article id="history">
-      <Appear animate show={props.entered}>
+      <Appear animate show={entered}>
         <Paragraph>
           History of mission launches including SpaceX launches starting from
           the year 2006.

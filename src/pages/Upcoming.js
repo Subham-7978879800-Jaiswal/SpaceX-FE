@@ -16,9 +16,9 @@ const Upcoming = (props) => {
   const tableBody = useMemo(() => {
     return launches
       ?.filter((launch) => launch.upcoming)
-      .map((launch) => {
+      .map((launch,index) => {
         return (
-          <tr key={String(launch.flightNumber)}>
+          <tr key={index}>
             <td>
               <Clickable style={{ color: "red" }}>
                 <Link

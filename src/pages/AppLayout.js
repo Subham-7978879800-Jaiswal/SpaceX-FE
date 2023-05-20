@@ -1,10 +1,5 @@
-import {
-  useState,
-} from "react";
-import {
-  Switch,
-  Route,
-} from "react-router-dom";
+import { useState } from "react";
+import { Switch, Route } from "react-router-dom";
 import { Frame, withSounds, withStyles } from "arwes";
 
 import usePlanets from "../hooks/usePlanets";
@@ -32,7 +27,7 @@ const styles = () => ({
   },
 });
 
-const AppLayout = props => {
+const AppLayout = (props) => {
   const { sounds, classes } = props;
 
   const [frameVisible, setFrameVisible] = useState(true);
@@ -47,15 +42,14 @@ const AppLayout = props => {
   const onAbortSound = () => sounds.abort && sounds.abort.play();
   const onFailureSound = () => sounds.warning && sounds.warning.play();
 
-  const {
-    launches,
-    isPendingLaunch,
-    submitLaunch,
-    abortLaunch,
-  } = useLaunches(onSuccessSound, onAbortSound, onFailureSound);
+  const { launches, isPendingLaunch, submitLaunch, abortLaunch,setPage,hasMoreLaunches } = useLaunches(
+    onSuccessSound,
+    onAbortSound,
+    onFailureSound
+  );
 
   const planets = usePlanets();
-  
+
   return (
     <div className={classes.content}>
       <Header onNav={animateFrame} />
@@ -94,9 +88,15 @@ const AppLayout = props => {
                 </Route>
                 <Route exact path="/history">
                   <History
+                    onSuccessSound={onSuccessSound}
+                    onAbortSound={onAbortSound}
+                    onFailureSound={onFailureSound}
                     sounds={sounds}
                     entered={anim.entered}
                     launches={launches}
+                    isPendingLaunch={isPendingLaunch}
+                    hasMoreLaunches={hasMoreLaunches}
+                    setPage={setPage}
                   />
                 </Route>
               </Switch>

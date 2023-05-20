@@ -2,14 +2,18 @@ import { useCallback, useEffect, useState } from "react";
 import { useErrorContext } from "./errorContext";
 
 import { httpGetLaunches, httpSubmitLaunch, httpAbortLaunch } from "./requests";
+import { useStore } from "./store";
 
 function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
-  const [launches, saveLaunches] = useState([]);
+  const { launches, saveLaunches } = useStore();
+
+  const pageNumber = (launches.length / 20) === 0 ? 1 : (launches.length / 20);
+
   const [isPendingLaunch, setPendingLaunch] = useState(false);
   const { updateErrorMessage } = useErrorContext();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(pageNumber);
   const [hasMoreLaunches, setHasMoreLaunches] = useState(true);
-
+  console.log(page);
   const getLaunches = useCallback(async () => {
     setPendingLaunch(true);
     const fetchedLaunches = await httpGetLaunches(20, page);
@@ -20,7 +24,7 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
         return [...prev, ...fetchedLaunches];
       });
     }
-  }, [page]);
+  }, [page, saveLaunches]);
 
   useEffect(() => {
     getLaunches();
@@ -91,6 +95,7 @@ function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
     submitLaunch,
     abortLaunch,
     setPage,
+    page,
     hasMoreLaunches,
   };
 }
