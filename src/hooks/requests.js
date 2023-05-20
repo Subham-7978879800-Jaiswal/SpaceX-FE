@@ -1,5 +1,6 @@
-const API_URL = "http://15.206.92.213:4000";
-console.log(API_URL);
+// const API_URL = "http://15.206.92.213:4000";
+const API_URL = "http://localhost:4000";
+
 // Load planets and return as JSON.
 async function httpGetPlanets() {
   try {
@@ -13,9 +14,23 @@ async function httpGetPlanets() {
 }
 
 // Load launches and return as JSON.
-async function httpGetLaunches(limit=15, page=1) {
+async function httpGetLaunches(limit = 15, page = 1) {
   try {
-    const response = await fetch(`${API_URL}/launches?limit=${limit}&page=${page}`);
+    const response = await fetch(
+      `${API_URL}/launches?limit=${limit}&page=${page}`
+    );
+    return await response.json();
+  } catch (err) {
+    return {
+      ErrorMessage: err.toString(),
+    };
+  }
+}
+
+// Load upcoming Launches and return as JSON.
+async function httpGetUpcomingLaunches() {
+  try {
+    const response = await fetch(`${API_URL}/launches/upcoming`);
     return await response.json();
   } catch (err) {
     return {
@@ -59,4 +74,10 @@ async function httpAbortLaunch(id) {
   }
 }
 
-export { httpGetPlanets, httpGetLaunches, httpSubmitLaunch, httpAbortLaunch };
+export {
+  httpGetPlanets,
+  httpGetLaunches,
+  httpSubmitLaunch,
+  httpAbortLaunch,
+  httpGetUpcomingLaunches,
+};

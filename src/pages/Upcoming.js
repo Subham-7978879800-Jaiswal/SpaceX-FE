@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { withStyles, Appear, Link, Paragraph, Table, Words } from "arwes";
-
+import { httpGetUpcomingLaunches } from "../hooks/requests";
+import { useStore } from "../hooks/store";
 import Clickable from "../components/Clickable";
 
 const styles = () => ({
@@ -13,30 +14,39 @@ const styles = () => ({
 const Upcoming = (props) => {
   const { entered, launches, classes, abortLaunch } = props;
 
+  const { setUpcomingLaunches, upcomingLaunches } = useStore();
+
+  const getUpcomingLaunches = async () => {
+    const upcomingLaunches = await httpGetUpcomingLaunches();
+    setUpcomingLaunches(upcomingLaunches);
+  };
+
+  useEffect(async () => {
+    getUpcomingLaunches();
+  }, []);
+
   const tableBody = useMemo(() => {
-    return launches
-      ?.filter((launch) => launch.upcoming)
-      .map((launch,index) => {
-        return (
-          <tr key={index}>
-            <td>
-              <Clickable style={{ color: "red" }}>
-                <Link
-                  className={classes.link}
-                  onClick={() => abortLaunch(launch.flightNumber)}
-                >
-                  ✖
-                </Link>
-              </Clickable>
-            </td>
-            <td>{launch.flightNumber}</td>
-            <td>{new Date(launch.launchDate).toDateString()}</td>
-            <td>{launch.mission}</td>
-            <td>{launch.rocket}</td>
-            <td>{launch.target}</td>
-          </tr>
-        );
-      });
+    return upcomingLaunches.map((launch, index) => {
+      return (
+        <tr key={index}>
+          <td>
+            <Clickable style={{ color: "red" }}>
+              <Link
+                className={classes.link}
+                onClick={() => abortLaunch(launch.flightNumber)}
+              >
+                ✖
+              </Link>
+            </Clickable>
+          </td>
+          <td>{launch.flightNumber}</td>
+          <td>{new Date(launch.launchDate).toDateString()}</td>
+          <td>{launch.mission}</td>
+          <td>{launch.rocket}</td>
+          <td>{launch.target}</td>
+        </tr>
+      );
+    });
   }, [launches, abortLaunch, classes.link]);
 
   return (
