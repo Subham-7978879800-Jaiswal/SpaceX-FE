@@ -79,4 +79,4 @@ jobs:
             docker stop nasa-fe || true
             docker rm nasa-fe || true
             docker pull subhamjaiswal79788/nasa-fe:${{ github.sha }}
-            docker run --restart=always -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} subhamjaiswal79788/nasa-fe:${{ github.sha }}
+            docker run --restart=always -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} --name nasa-fe-container subhamjaiswal79788/nasa-fe:${{ github.sha }}
