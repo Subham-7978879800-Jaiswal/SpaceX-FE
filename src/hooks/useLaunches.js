@@ -7,13 +7,13 @@ import { useStore } from "./store";
 function useLaunches(onSuccessSound, onAbortSound, onFailureSound) {
   const { launches, saveLaunches } = useStore();
 
-  const pageNumber = (launches.length / 20) === 0 ? 1 : (launches.length / 20);
+  const pageNumber = launches.length / 20 === 0 ? 1 : launches.length / 20;
 
   const [isPendingLaunch, setPendingLaunch] = useState(false);
   const { updateErrorMessage } = useErrorContext();
   const [page, setPage] = useState(pageNumber);
   const [hasMoreLaunches, setHasMoreLaunches] = useState(true);
-  console.log(page);
+
   const getLaunches = useCallback(async () => {
     setPendingLaunch(true);
     const fetchedLaunches = await httpGetLaunches(20, page);

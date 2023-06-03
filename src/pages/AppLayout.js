@@ -12,6 +12,7 @@ import Footer from "../components/Footer";
 import Launch from "./Launch";
 import History from "./History";
 import Upcoming from "./Upcoming";
+import Authentication from "./Authentication";
 
 const styles = () => ({
   content: {
@@ -98,6 +99,10 @@ const AppLayout = (props) => {
                     hasMoreLaunches={hasMoreLaunches}
                     setPage={setPage}
                   />
+                </Route>
+
+                <Route exact path="/sign-in">
+                 <Authentication></Authentication>
                 </Route>
               </Switch>
             </div>

@@ -1,10 +1,9 @@
-// const API_URL = "http://15.206.92.213:4000";
-const API_URL = "http://localhost:4000";
-
+const { REACT_APP_API_URL } = process.env;
+console.log(REACT_APP_API_URL);
 // Load planets and return as JSON.
 async function httpGetPlanets() {
   try {
-    const response = await fetch(`${API_URL}/planets`);
+    const response = await fetch(`${REACT_APP_API_URL}/planets`);
     return await response.json();
   } catch (err) {
     return {
@@ -17,7 +16,7 @@ async function httpGetPlanets() {
 async function httpGetLaunches(limit = 15, page = 1) {
   try {
     const response = await fetch(
-      `${API_URL}/launches?limit=${limit}&page=${page}`
+      `${REACT_APP_API_URL}/launches?limit=${limit}&page=${page}`
     );
     return await response.json();
   } catch (err) {
@@ -30,7 +29,7 @@ async function httpGetLaunches(limit = 15, page = 1) {
 // Load upcoming Launches and return as JSON.
 async function httpGetUpcomingLaunches() {
   try {
-    const response = await fetch(`${API_URL}/launches/upcoming`);
+    const response = await fetch(`${REACT_APP_API_URL}/launches/upcoming`);
     return await response.json();
   } catch (err) {
     return {
@@ -42,7 +41,7 @@ async function httpGetUpcomingLaunches() {
 // Submit given launch data to launch system.
 async function httpSubmitLaunch(launch) {
   try {
-    const submitLaunchResponse = await fetch(`${API_URL}/launches`, {
+    const submitLaunchResponse = await fetch(`${REACT_APP_API_URL}/launches`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -62,9 +61,12 @@ async function httpSubmitLaunch(launch) {
 // Delete launch with given ID.
 async function httpAbortLaunch(id) {
   try {
-    const abortLaunchResponse = await fetch(`${API_URL}/launches/${id}`, {
-      method: "delete",
-    });
+    const abortLaunchResponse = await fetch(
+      `${REACT_APP_API_URL}/launches/${id}`,
+      {
+        method: "delete",
+      }
+    );
     const abortLaunchResponseJSON = await abortLaunchResponse.json();
     return abortLaunchResponseJSON;
   } catch (err) {

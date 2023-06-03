@@ -1,4 +1,4 @@
-import { 
+import {
   Logo,
   Words,
   Header as ArwesHeader,
@@ -9,7 +9,10 @@ import { Link } from "react-router-dom";
 import Clickable from "./Clickable";
 import Centered from "./Centered";
 
-const styles = theme => ({
+import SignUpModal from "./SignUpModal/SignUpModal";
+import { useState } from "react";
+
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexDirection: "row",
@@ -58,46 +61,83 @@ const styles = theme => ({
     },
     clickable: {
       fontSize: 16,
-    }
+    },
   },
 });
 
-const Header = props => {
+const Header = (props) => {
   const { classes, onNav, ...rest } = props;
-  return <ArwesHeader animate>
-    <Centered className={classes.root} {...rest}>
-      <img src="/favicon.png" alt="" className={classes.img} style={{
-        margin: "15px 10px 15px 0",
-        height: "50px",
-        width: "auto",
-      }} />
-      <Logo animate size={50} className={classes.logo} layer="header" />
-      <Words animate className={classes.banner}>
-        NASA Mission Control
-      </Words>
-      <nav className={`${classes.nav}`}>
-        <Clickable className={classes.clickable} onClick={onNav}>
-          <Highlight className={classes.button} animate layer="header">
-            <Link className={classes.link} to="/launch">
-              <i className="material-icons">check_circle_outline</i>Launch
-            </Link>
-          </Highlight>
-        </Clickable>
-        <Clickable className={classes.clickable} onClick={onNav}>
-          <Highlight className={classes.button} animate layer="header">
-            <Link className={classes.link} to="/upcoming">
-            <i className="material-icons">update</i>Upcoming</Link>
-          </Highlight>
-        </Clickable>
-        <Clickable className={classes.clickable} onClick={onNav}>
-          <Highlight className={classes.button} animate layer="header">
-            <Link className={classes.link} to="/history">
-            <i className="material-icons">history</i>History</Link>
-          </Highlight>
-        </Clickable>
-      </nav>
-    </Centered>
-  </ArwesHeader>
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const { REACT_APP_API_URL } = process.env;
+
+  return (
+    <>
+      <ArwesHeader animate>
+        <Centered
+          style={{
+            maxWidth: "1200px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "fitContent",
+          }}
+          className={classes.root}
+          {...rest}
+        >
+          <img
+            src="/favicon.png"
+            alt=""
+            className={classes.img}
+            style={{
+              margin: "15px 10px 15px 0",
+              height: "50px",
+              width: "auto",
+            }}
+          />
+          <Logo animate size={50} className={classes.logo} layer="header" />
+          <Words animate className={classes.banner}>
+            NASA Mission Control
+          </Words>
+          <nav className={`${classes.nav}`}>
+            <Clickable className={classes.clickable} onClick={onNav}>
+              <Highlight className={classes.button} animate layer="header">
+                <Link className={classes.link} to="/launch">
+                  <i className="material-icons">check_circle_outline</i>Launch
+                </Link>
+              </Highlight>
+            </Clickable>
+            <Clickable className={classes.clickable} onClick={onNav}>
+              <Highlight className={classes.button} animate layer="header">
+                <Link className={classes.link} to="/upcoming">
+                  <i className="material-icons">update</i>Upcoming
+                </Link>
+              </Highlight>
+            </Clickable>
+            <Clickable className={classes.clickable} onClick={onNav}>
+              <Highlight className={classes.button} animate layer="header">
+                <Link className={classes.link} to="/history">
+                  <i className="material-icons">history</i>History
+                </Link>
+              </Highlight>
+            </Clickable>
+            <Clickable
+              onClick={() => {
+                setShowSignUpModal(true);
+              }}
+              className={classes.clickable}
+            >
+              <i className="material-icons">history</i>
+              SignIn
+            </Clickable>
+          </nav>
+        </Centered>
+      </ArwesHeader>
+
+      <SignUpModal
+        showSignUpModal={showSignUpModal}
+        setShowSignUpModal={setShowSignUpModal}
+      ></SignUpModal>
+    </>
+  );
 };
 
 export default withStyles(styles)(Header);
